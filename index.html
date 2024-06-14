@@ -27,7 +27,7 @@
             object-fit: contain;
         }
         #underImage {
-            display: none; /* Ukryj obraz pod spodem na początku */
+            visibility: hidden; /* Ukryj obraz pod spodem na początku */
         }
         #scratchCanvas {
             touch-action: none;
@@ -57,36 +57,38 @@
             imgTop.src = 'uuu.png';
             imgBottom.src = 'sweet-scratch.png';
 
-            imgTop.onload = function() {
-                const aspectRatioTop = imgTop.width / imgTop.height;
-                const aspectRatioBottom = imgBottom.width / imgBottom.height;
-                let scaledWidthTop, scaledHeightTop;
-                let xTop = 0, yTop = 0;
-
-                if (aspectRatioTop > aspectRatioBottom) {
-                    // Obraz na wierzchu jest szerszy
-                    scaledWidthTop = canvasWidth;
-                    scaledHeightTop = scaledWidthTop / aspectRatioTop;
-                    xTop = 0;
-                    yTop = (canvasHeight - scaledHeightTop) / 2;
-                } else {
-                    // Obraz na wierzchu jest wyższy lub mają takie same proporcje
-                    scaledHeightTop = canvasHeight;
-                    scaledWidthTop = scaledHeightTop * aspectRatioTop;
-                    yTop = 0;
-                    xTop = (canvasWidth - scaledWidthTop) / 2;
-                }
-
-                ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-                ctx.drawImage(imgTop, xTop, yTop, scaledWidthTop, scaledHeightTop);
-                ctx.globalCompositeOperation = 'destination-out';
-
-                // Pokaż obraz pod spodem dopiero po nałożeniu obrazu na górze
-                underImage.style.display = 'block';
-            };
-
             imgBottom.onload = function() {
-                // Nic tutaj nie robimy, wszystko kontroluje imgTop.onload
+                // Poczekaj na załadowanie obrazu pod spodem
+                underImage.style.visibility = 'hidden';
+                imgTop.onload = function() {
+                    const aspectRatioTop = imgTop.width / imgTop.height;
+                    const aspectRatioBottom = imgBottom.width / imgBottom.height;
+                    let scaledWidthTop, scaledHeightTop;
+                    let scaledWidthBottom, scaledHeightBottom;
+                    let xTop = 0, yTop = 0;
+
+                    if (aspectRatioTop > aspectRatioBottom) {
+                        // Obraz na wierzchu jest szerszy
+                        scaledWidthTop = canvasWidth;
+                        scaledHeightTop = scaledWidthTop / aspectRatioTop;
+                        xTop = 0;
+                        yTop = (canvasHeight - scaledHeightTop) / 2;
+                    } else {
+                        // Obraz na wierzchu jest wyższy lub mają takie same proporcje
+                        scaledHeightTop = canvasHeight;
+                        scaledWidthTop = scaledHeightTop * aspectRatioTop;
+                        yTop = 0;
+                        xTop = (canvasWidth - scaledWidthTop) / 2;
+                    }
+
+                    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+                    ctx.drawImage(imgTop, xTop, yTop, scaledWidthTop, scaledHeightTop);
+                    ctx.globalCompositeOperation = 'destination-out';
+
+                    // Pokaż obraz pod spodem po nałożeniu obrazu na górze
+                    underImage.style.visibility = 'visible';
+                };
+                imgTop.src = 'uuu.png';
             };
         }
 
@@ -116,7 +118,7 @@
             evt.preventDefault();
             const pos = evt.type.includes('touch') ? getTouchPos(canvas, evt) : getMousePos(canvas, evt);
             ctx.beginPath();
-            ctx.arc(pos.x, pos.y, 9, 0, 2 * Math.PI); // Zmniejszam promień do 10 pikseli
+            ctx.arc(pos.x, pos.y, 9, 0, 2 * Math.PI); // Zmniejszam promień do 9 pikseli
             ctx.fill();
         }
 
