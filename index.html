@@ -118,7 +118,7 @@
             evt.preventDefault();
             const pos = evt.type.includes('touch') ? getTouchPos(canvas, evt) : getMousePos(canvas, evt);
             ctx.beginPath();
-            ctx.arc(pos.x, pos.y, 9, 0, 2 * Math.PI); // Zmniejszam promień do 9 pikseli
+            ctx.arc(pos.x, pos.y, 12, 0, 2 * Math.PI); // Zmniejszam promień do 9 pikseli
             ctx.fill();
         }
 
