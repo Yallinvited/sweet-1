@@ -27,8 +27,7 @@
             object-fit: contain;
         }
         #underImage {
-            visibility: hidden; /* Ukryj obraz pod spodem na początku */
-            transition: visibility 0s linear 0.1s; /* Opóźnienie pokazania o 0.1s */
+            display: none; /* Ukryj obraz pod spodem na początku */
         }
         #scratchCanvas {
             touch-action: none;
@@ -86,9 +85,7 @@
 
             imgBottom.onload = function() {
                 // Pokaż obraz pod spodem dopiero po pełnym załadowaniu strony
-                setTimeout(() => {
-                    underImage.style.visibility = 'visible';
-                }, 300); // Opóźnienie pokazania o 300ms, aby upewnić się, że strona jest w pełni załadowana
+                underImage.style.display = 'block';
             };
         }
 
@@ -131,8 +128,3 @@
     </script>
 </body>
 </html>
-
-
-
-
-
